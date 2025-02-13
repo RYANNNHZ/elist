@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 use App\Models\lists;
+use Laravel\Prompts\error;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
-use function Laravel\Prompts\error;
 class listController extends Controller
 {
     /**
@@ -30,7 +29,7 @@ class listController extends Controller
      */
     public function store(Request $request)
     {
-        $pesanError = $request->validate([
+        $request->validate([
             'title' => 'required|min:3|max:35',
         ],[
             'title.required' => 'title cannot be empty',
@@ -44,9 +43,8 @@ class listController extends Controller
             'user_id' => Auth::user()->id
         ]);
 
-        if($pesanError){
             return redirect('/list');
-        }
+
     }
 
     /**
@@ -71,8 +69,27 @@ class listController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $list = Lists::where('id', $id)->firstOrFail();
+
+        // Cek apakah ada input yang dikirim
+        $data = [];
+
+        if ($request->has('title')) {
+            $data['title'] = $request->title;
+        }
+
+        if ($request->has('description')) {
+            $data['description'] = $request->description;
+        }
+
+        // Kalau ada data yang diupdate, baru jalanin update()
+        if (!empty($data)) {
+            $list->update($data);
+        }
+
+        return redirect()->back();
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -80,7 +97,6 @@ class listController extends Controller
     public function destroy(string $id)
     {
         $lists = lists::where('id', $id)->firstOrFail(); // Cari berdasarkan UUID
-
         $lists->delete(); // Hapus task
 
         return redirect('/list');

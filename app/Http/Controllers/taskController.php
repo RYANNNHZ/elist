@@ -65,7 +65,12 @@ class taskController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $task = task::where('id', $id)->firstOrFail();
+        $task->update([
+           'task' => $request->task
+        ]);
+
+        return redirect()->back();
     }
 
     /**

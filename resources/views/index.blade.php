@@ -34,10 +34,10 @@
     <div class="d-flex" id="wrapper">
         <div class="border-end bg-white" id="sidebar-wrapper">
             <div class="sidebar-heading border-bottom bg-light">
-                <img src="favicon.png" style="width: 2em" alt=""> <b>remindme</b>
+                <img src="favicon.png" style="width: 2em" alt=""> <b>elists</b>
             </div>
             <div class="list-group list-group-flush">
-                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/">List</a>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/list"><b>catatan</b></a>
             </div>
         </div>
         <div id="page-content-wrapper">
@@ -76,6 +76,11 @@
                     {{ $message }}
                   </div>
             @enderror
+                @error('description')
+                <div class="alert alert-danger my-3" role="alert">
+                    {{ $message }}
+                  </div>
+            @enderror
 
                 @yield('content')
             </div>
@@ -96,7 +101,7 @@
                             <input type="text" id="title" class="fs-4 form-control border-0 shadow-none" placeholder="Title..." name="title">
                         </div>
                         <div class="mb-3">
-                            <input type="text" id="description" class="form-control border-0 shadow-none"  name="'description" placeholder="Description...">
+                            <input type="text" id="description" class="form-control border-0 shadow-none"  name="description" placeholder="Description...">
                         </div>
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-primary">Save</button>
