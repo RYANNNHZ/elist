@@ -18,7 +18,7 @@ return new class extends Migration
             ->onDelete('cascade')
             ->onUpdate('cascade');
             $table->string('title');
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->enum('status',['pending','in_progress','completed']);
             $table->timestamps();
         });

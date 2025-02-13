@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\authController;
+use App\Http\Controllers\listController;
+use App\Http\Controllers\taskController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,5 +17,16 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('welcome')->with(['header' => 'welcome elist']);
 });
+
+Route::resource('/list', listController::class);
+Route::resource('/task', taskController::class);
+
+
+//auth router
+Route::get('/loginpage',[authController::class,'loginPage']);
+Route::get('/registerpage',[authController::class,'registerPage']);
+Route::post('/login',[AuthController::class,'login']);
+Route::post('/register',[AuthController::class,'register']);
+Route::get('/logout',[AuthController::class,'logout']);
