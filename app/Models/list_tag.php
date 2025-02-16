@@ -6,10 +6,8 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Lists extends Model
+class ListTag extends Model
 {
     use HasFactory, HasUuids;
 
@@ -20,14 +18,13 @@ class Lists extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function tasks(): HasMany
+    public function list(): BelongsTo
     {
-        return $this->hasMany(Task::class);
+        return $this->belongsTo(Lists::class);
     }
 
-    public function tags(): BelongsToMany
+    public function tag(): BelongsTo
     {
-        return $this->belongsToMany(Tag::class, 'list_tags', 'list_id', 'tag_id')
-            ->withTimestamps();
+        return $this->belongsTo(Tag::class);
     }
 }

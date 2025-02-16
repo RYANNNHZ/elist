@@ -54,6 +54,32 @@
             </button>
         </form>
       </div>
+
+
+      <script>
+            function openEditTask(){
+        wpTask.innerHTML = `
+<form action="/task/{{$task->id}}" method="POST">
+    @method('PATCH')
+    @csrf
+    <input type="text" name="task" class="form-control border-none" value="{{$task->task}}">
+    @error('task')
+    <small class="text-danger">{{$message}}</small>
+    @enderror
+    <button type="submit" class="btn btn-warning" >edit</button>
+   <button class="btn btn-dark" onclick="closeEditTask()">close</button>
+</form>
+        `;
+    }
+
+    function closeEditTask(){
+        wpTask.innerHTML = `
+          <p {{ $task->task }} id="task" onclick="openEditTask()" > {{ $task->task }}</p>
+        `;
+    }
+      </script>
+
+
     @endforeach
 </div>
 
@@ -135,29 +161,6 @@
         <p id="title" onclick="openEditdescription()">{{ $list->description }}</p>
         `;
     }
-
-    function openEditTask(){
-        wpTask.innerHTML = `
-<form action="/task/{{$task->id}}" method="POST">
-    @method('PATCH')
-    @csrf
-    <input type="text" name="task" class="form-control border-none" value="{{$task->task}}">
-    @error('task')
-    <small class="text-danger">{{$message}}</small>
-    @enderror
-    <button type="submit" class="btn btn-warning" >edit</button>
-   <button class="btn btn-dark" onclick="closeEditTask()">close</button>
-</form>
-        `;
-    }
-
-    function closeEditTask(){
-        wpTask.innerHTML = `
-          <p {{ $task->task }} id="task" onclick="openEditTask()" > {{ $task->task }}</p>
-        `;
-    }
-
-
 
 </script>
 @endsection

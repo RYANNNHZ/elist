@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\lists;
+use App\Models\tag;
 use Laravel\Prompts\error;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,7 +14,8 @@ class listController extends Controller
     public function index()
     {
         $lists = Auth::user()->lists;
-        return view('contents.lists')->with(['header' => 'lists','lists' => $lists]);
+        $tags = Auth::user()->tags;
+        return view('contents.lists')->with(['header' => 'lists','lists' => $lists,'tags' => $tags]);
     }
 
     /**

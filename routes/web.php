@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\authController;
 use App\Http\Controllers\listController;
+use App\Http\Controllers\tagController;
 use App\Http\Controllers\taskController;
 use Illuminate\Support\Facades\Route;
 
@@ -22,6 +23,7 @@ Route::get('/', function () {
 
 Route::resource('/list', listController::class);
 Route::resource('/task', taskController::class);
+Route::resource('/tag', tagController::class);
 
 
 //auth router

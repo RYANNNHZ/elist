@@ -8,10 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class task extends Model
+class Task extends Model
 {
-    use HasFactory,HasUuids;
-    protected $guarded = ['id','created_at','updated_at'];
+    use HasFactory, HasUuids;
+
+    protected $guarded = ['id', 'created_at', 'updated_at'];
 
     public function list(): BelongsTo
     {
@@ -20,6 +21,7 @@ class task extends Model
 
     public function tags(): BelongsToMany
     {
-        return $this->belongsToMany(Tag::class, 'task_tags', 'task_id', 'tag_id');
+        return $this->belongsToMany(Tag::class, 'task_tags', 'task_id', 'tag_id')
+            ->withTimestamps();
     }
 }

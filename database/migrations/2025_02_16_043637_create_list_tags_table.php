@@ -11,13 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tags', function (Blueprint $table) {
+        Schema::create('list_tags', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('user_id')
                 ->constrained('users')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
-            $table->string('name');
+            $table->foreignUuid('list_id')
+                ->constrained('lists')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+            $table->foreignUuid('tag_id')
+                ->constrained('tags')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
             $table->timestamps();
         });
     }
@@ -27,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tags');
+        Schema::dropIfExists('list_tags');
     }
 };

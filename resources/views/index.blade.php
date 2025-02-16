@@ -36,9 +36,37 @@
             <div class="sidebar-heading border-bottom bg-light">
                 <img src="favicon.png" style="width: 2em" alt=""> <b>elists</b>
             </div>
+
             <div class="list-group list-group-flush">
                 <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/list"><b>catatan</b></a>
             </div>
+
+            <div class="list-group list-group-flush">
+                ++++++++++++++++++++
+            </div>
+
+            @forelse ($tags as $tag)
+            <div class="list-group list-group-flush">
+                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/list"><b>{{ $tag->name }}</b></a>
+            </div>
+            @empty
+                <small>there is no tag</small>
+            @endforelse
+
+
+
+
+
+            <div id="wpAddTag" class="list-group list-group-flush ">
+                <form action="/tag" method="POST" >
+                    @csrf
+                    <input type="text" name="tag" class="form-control" >
+                    <input type="hidden" name="user_id" value="{{ Auth::user()->id }}" >
+                    <button type="submit" class="btn btn-warning" >add tag</button>
+                </form>
+            </div>
+
+
         </div>
         <div id="page-content-wrapper">
             <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
@@ -118,6 +146,7 @@
         document.getElementById("sidebarToggle").addEventListener("click", function() {
             document.getElementById("wrapper").classList.toggle("toggled");
         });
+
     </script>
 </body>
 </html>
