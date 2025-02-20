@@ -63,7 +63,7 @@
                     @csrf
                     <input type="hidden" name="is_done" value="{{ $task->is_done }}">
                     <button type="submit" class="btn btn-warning mx-2">
-                        <i class="bi bi-check"></i>
+                        <i class="bi {{ $task->is_done == 'done' ? 'bi-x' : 'bi-check' }}"></i>
                     </button>
                 </form>
 
