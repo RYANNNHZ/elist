@@ -1,12 +1,13 @@
 @extends('blank')
 
-@section('content')
-    <div class="container-fluid">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
 
-                    <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Login <i class="bi bi-book-fill"></i> </p>
+@section('content')
+<div class="container-fluid p-5">
+    <div class="row">
+        <div class="col-12 col-md-6">
+            <div class="card" style="height: 500px;border: none;">
+                <div class="card-body d-flex flex-column align-items-center justify-content-center">
+                                        <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Hello, welcomeback 👋.</p>
 
                     <form action="/login" method="POST" class="mx-1 mx-md-4">
                         @csrf
@@ -44,29 +45,39 @@
                             <p class="text-dark me-4"> dont have an account <a class="text-decoration-none"
                                     href="/registerpage">register</a> </p>
                             <button type="submit" data-mdb-button-init data-mdb-ripple-init
-                                class="btn btn-dark btn-lg">Login</button>
+                                class="btn btn-dark btn-lg" style="background-color: #ffa200; border: none">Login</button>
                         </div>
 
                     </form>
 
+                    
                 </div>
             </div>
         </div>
+        <div class="col-0 col-md-6" class=" d-none d-md-flex">
+            <img src="elist.png" class="w-100 rounded-4" alt="">
+        </div>
     </div>
+</div>
 
-    <script>
-        document.getElementById('togglePassword').addEventListener('click', function () {
-            let passwordInput = document.getElementById('password');
-            let icon = this.querySelector('i');
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                icon.classList.remove('fa-eye');
-                icon.classList.add('fa-eye-slash');
-            } else {
-                passwordInput.type = 'password';
-                icon.classList.remove('fa-eye-slash');
-                icon.classList.add('fa-eye');
-            }
-        });
-    </script>
+
+<script>
+    document.getElementById('togglePassword').addEventListener('click', function () {
+        let passwordInput = document.getElementById('password');
+        let icon = this.querySelector('i');
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            passwordInput.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
+    });
+</script>
+
 @endsection
+
+
+

@@ -33,31 +33,35 @@
 <body>
     <div class="d-flex" id="wrapper">
         <div class="border-end bg-white" id="sidebar-wrapper">
-            <div class="sidebar-heading border-bottom bg-light">
-                <img src="favicon.png" style="width: 2em" alt=""> <b>elists</b>
+            <div class="sidebar-heading border-bottom bg-light p-2 ">
+                <h1> <i class="bi bi-card-checklist" style="color: #dd7600" ></i> <b>elists</b></h1>
+
             </div>
 
             <div class="list-group list-group-flush">
-                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/list"><b>catatan</b></a>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/list">catatan <i class="bi bi-card-checklist" style="color: #dd7600" ></i> </a>
             </div>
 
             <div class="list-group list-group-flush">
-                ++++++++++++++++++++
+                <hr>
             </div>
 
+            <small class="ms-3"><b>tags <i class="bi bi-threads"></i> </b></small>
             @forelse (Auth::user()->tags as $tag)
-            <div class="list-group list-group-flush d-flex">
-                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/tag/{{$tag->id}}"><b>{{ $tag->name }}</b></a>
-
-                <form action="/tag/{{ $tag->id }}" method="POST" >
-                    @csrf
-                    @method('delete')
-                    <button type="submit" class="btn btn-danger mx-2">
-                       delete tag
-                    </button>
-                </form>
-                <a class="btn btn-warning w-50" href="/tag/{{$tag->id}}/edit" > edit </a>
+            <div class="list-group list-group-flush">
+                <div class="d-flex align-items-center justify-content-between list-group-item list-group-item-action list-group-item-light p-3">
+                    <a href="/tag/{{$tag->id}}" class="text-decoration-none text-dark flex-grow-1">{{ $tag->name }}</a>
+                    <form action="/tag/{{ $tag->id }}" method="POST" class="d-inline mb-0">
+                        @csrf
+                        @method('delete')
+                        <button type="submit" class="bg-transparent border-0 p-0 fs-3">
+                            <i class="bi bi-x"></i>
+                        </button>
+                    </form>
+                    <a class="text-dark mx-2" href="/tag/{{$tag->id}}/edit"><i class="bi bi-pencil"></i></a>
+                </div>
             </div>
+
             @empty
                 <small>there is no tag</small>
             @endforelse
@@ -66,32 +70,37 @@
 
 
 
+            <hr>
+            <small class="ms-3"><b>add tag <i class="bi bi-threads"></i> </b></small>
             <div id="wpAddTag" class="list-group list-group-flush ">
                 <form action="/tag" method="POST" >
                     @csrf
                     <input type="text" name="name" class="form-control" >
                     <input type="hidden" name="user_id" value="{{ Auth::user()->id }}" >
-                    <button type="submit" class="btn btn-warning" >add tag</button>
+                    <button type="submit" class="bg-transparent border-0 p-0 fs-3" ><i class="bi bi-plus"></i></button>
                 </form>
             </div>
 
-            <div>
-                <a href="/trash">trash</a>
+            <hr>
+            <div class="p-2">
+                <a href="/trash" style="text-decoration: none; color: #dd7600" >trash <i class="bi bi-recycle"></i> </a>
             </div>
+            <hr>
 
 
         </div>
+
         <div id="page-content-wrapper">
             <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
-                <div class="container-fluid">
-                    <button class="btn btn-primary" id="sidebarToggle">
-                        <i class="bi bi-command"></i>
-                    </button>
+                <div class="container-fluid p-3 rounded-3" style="background-color: #ffbd72">
+                    <div class="d-flex align-items-center w-100">
+                        <!-- Sidebar Toggle (Tetap Ada) -->
+                        <button class="btn btn-primary me-2" style="background-color: #ffe5b8; border: none; color: #dd7600" id="sidebarToggle">
+                            <i class="bi bi-command"></i>
+                        </button>
 
-
-                    <div class="col-md-5 my-auto ms-3">
-                        <form role="search" method="POST" action="/search">
-                            @method('post')
+                        <!-- Search Form -->
+                        <form role="search" method="POST" action="/search" class="flex-grow-1 d-none d-lg-block">
                             @csrf
                             <div class="input-group">
                                 <input type="search" name="lists" placeholder="Search your product" class="form-control" />
@@ -100,34 +109,45 @@
                                 </button>
                             </div>
                         </form>
+
+                        <!-- Navbar Toggle Button -->
+                        <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
                     </div>
 
-
-
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
+                    <!-- Navbar Content -->
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <!-- Search Bar (Visible in Mobile) -->
+                        <form role="search" method="POST" action="/search" class="mt-2 w-100 d-lg-none">
+                            @csrf
+                            <div class="input-group">
+                                <input type="search" name="lists" placeholder="Search your product" class="form-control" />
+                                <button class="btn bg-white" type="submit">
+                                    <i class="bi bi-search"></i>
+                                </button>
+                            </div>
+                        </form>
+
+                        <!-- User Profile -->
                         <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
-                            @if ($header === 'lists')
-                            <li class="nav-item active">
-                                <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal">Create</button>
-                            </li>
-                            @endif
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <img class="card-img-top" src="https://avatar.iran.liara.run/username?username={{ Auth::user()->username }}" alt="Title" style="width:2em" />
+                                <a class="nav-link dropdown-toggle d-flex align-items-center gap-2" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <img class="rounded-circle" src="https://avatar.iran.liara.run/username?username={{ Auth::user()->username }}" alt="Profile" style="width: 2em; height: 2em;">
+                                    <span>{{ Auth::user()->username }}</span>
                                 </a>
-                                <h4>{{ Auth::user()->username }}</h4>
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="/profile">Profile</a>
-                                    <a class="dropdown-item" href="/logout">logout</a>
+                                    <a class="dropdown-item" href="/logout">Logout</a>
                                 </div>
                             </li>
                         </ul>
                     </div>
                 </div>
             </nav>
+
+
+
             <div class="container-fluid">
                 @error('title')
                 <div class="alert alert-danger my-3" role="alert">
@@ -145,6 +165,9 @@
                   </div>
             @enderror
 
+            @if ($header === 'lists')
+            <button type="button" class="btn btn-warning my-2" style="background-color: #ffe5b8; border: none;color: #dd7600" data-bs-toggle="modal" data-bs-target="#exampleModal">Create <i class="bi bi-plus"></i></button>
+        @endif
                 @yield('content')
             </div>
         </div>
@@ -154,7 +177,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Create Item</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Create list</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -170,13 +193,16 @@
                             <input type="date" id="description" class="form-control border-0 shadow-none"  name="expired" placeholder="" >
                         </div>
                         <div class="mb-3">
-                            <div id="wpEditTag" onclick="openEditTag()" class="mb-3">
-                                <label for="" class="form-label" onclick="openEditTag()" >tag</label>
-                            </div>
+                            <label for="" class="form-label" onclick="closeEditTag()">tag</label>
+                            <select class="form-select form-select-lg" name="tag">
+                                @foreach (Auth::user()->tags as $tag)
+                                <option value="{{$tag->id}}">{{$tag->name}}</option>
+                                @endforeach
+                            </select>
 
                         </div>
                         <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="submit" class="btn btn-primary" style="background-color: #ffe5b8; border: none;color: #dd7600" >Save <i class="bi bi-check" ></i></button>
                         </div>
                     </form>
                 </div>
@@ -200,18 +226,6 @@
     `;
 }
 
-
-
-        function openEditTag(){
-    wpedittag.innerHTML = `
-        <label for="" class="form-label" onclick="closeEditTag()">tag</label>
-        <select class="form-select form-select-lg" name="tag">
-            @foreach (Auth::user()->tags as $tag)
-            <option value="{{$tag->id}}">{{$tag->name}}</option>
-            @endforeach
-        </select>
-    `;
-}
 
 
 
