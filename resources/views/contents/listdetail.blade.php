@@ -13,16 +13,20 @@
     @csrf
     <div class="modal-body">
         <input type="hidden" value="{{ $list->id }}" name="id">
-        <input type="text" name="task" placeholder="Add task..." class="form-control">
-        <div class="modal-footer">
-            <button type="submit" class="btn btn-primary">Add</button>
-        </div>
+        <input type="text" name="task" placeholder="Add task..." required class="fs-4 form-control border-0 shadow-none">
+            <button type="submit" class="btn btn-primary" style="background-color: #ffe5b8; border: none;color: #dd7600" > add <i></i> </button>
     </div>
 </form>
 
 <!-- Edit Title -->
-<div id="wpEditTitle">
+<div id="wpEditTitle" class="d-flex">
+    <!-- Delete List -->
     <h1 id="title" onclick="openEditTitle()">{{ $list->title }}</h1>
+    <form action="/list/{{ $list->id }}" method="POST">
+    @csrf
+    @method('delete')
+    <button type="submit" class="btn btn-danger mx-2"><i class="bi bi-trash2-fill"></i></button>
+    </form>
 </div>
 
 <!-- Edit Description -->
@@ -35,26 +39,20 @@
 </div>
 
 <!-- Tags -->
-<div id="wpTags">
-    <p class="bg-warning">{{ $list->tags->pluck('name')->join(', ') }}</p>
-</div>
 
-<!-- Delete List -->
-<form action="/list/{{ $list->id }}" method="POST">
-    @csrf
-    @method('delete')
-    <button type="submit" class="btn btn-danger mx-2">Delete List</button>
-</form>
+    <div class="btn btn-warning my-1" style="background-color: #ffe5b8; border: none;color: #dd7600" ># {{ $list->tags->pluck('name')->join(', ') }}</div>
+
+
+
 
 <!-- Tasks List -->
-<div wire:poll>
+<div class="my-3"  >
     @if ($list->tasks->isNotEmpty())
         @foreach ($list->tasks as $task)
         <div class="form-check border rounded-2 p-3 d-flex justify-content-between task-container">
             <div class="d-flex align-items-center">
-                <input class="form-check-input ms-1" type="checkbox" {{ $task->is_done == 'done' ? 'checked' : '' }}>
                 <label class="form-check-label ms-2">
-                    <p class="task-text" data-task-id="{{ $task->id }}" data-original-task="{{ $task->task }}">{{ $task->task }}</p>
+                    <p class="task-text {{ $task->is_done == 'done' ? 'text-decoration-line-through' : '' }}" data-task-id="{{ $task->id }}" data-original-task="{{ $task->task }}">{{ $task->task }}</p>
                 </label>
             </div>
 
@@ -104,7 +102,7 @@
             <form action="/task/${taskId}" method="POST">
                 @method('PATCH')
                 @csrf
-                <input type="text" name="task" class="form-control border-none" value="${taskText}">
+                <input type="text" name="task" class="fs-4 form-control border-0 shadow-none" value="${taskText}">
                 <button type="submit" class="btn btn-warning">Edit</button>
                 <button type="button" class="btn btn-dark cancel-edit" data-task-id="${taskId}" data-original-task="${taskText}">Close</button>
             </form>
@@ -139,7 +137,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close"  data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
         </div>
@@ -152,7 +150,7 @@
             <form action="/list/{{$list->id}}" method="POST">
                 @method('PATCH')
                 @csrf
-                <input type="text" name="description" class="form-control" value="{{$list->description ?? ''}}">
+                <input type="text" name="description" class="form-control border-0 shadow-none " value="{{$list->description ?? ''}}">
                 <button type="submit" class="btn btn-warning mt-2">Save</button>
                 <button type="button" class="btn btn-dark mt-2" onclick="closeEditDescription()">Cancel</button>
             </form>
@@ -174,7 +172,7 @@
             <form action="/list/{{$list->id}}" method="POST">
                 @method('PATCH')
                 @csrf
-                <input type="text" name="title" class="form-control" value="{{$list->title}}">
+                <input type="text" name="title"  class="form-control border-0 shadow-none fs-1" value="{{$list->title}}">
                 <button type="submit" class="btn btn-warning mt-2">Save</button>
                 <button type="button" class="btn btn-dark mt-2" onclick="closeEditTitle()">Cancel</button>
             </form>
@@ -184,6 +182,11 @@
     function closeEditTitle() {
         document.getElementById('wpEditTitle').innerHTML = `
             <h1 id="title" onclick="openEditTitle()">{{ $list->title }}</h1>
+            <form action="/list/{{ $list->id }}" method="POST">
+    @csrf
+    @method('delete')
+    <button type="submit" class="btn btn-danger mx-2"><i class="bi bi-trash2-fill"></i></button>
+    </form>
         `;
     }
 

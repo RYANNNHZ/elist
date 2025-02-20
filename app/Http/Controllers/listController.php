@@ -91,6 +91,7 @@ return view('contents.lists')->with([
      */
     public function update(Request $request, string $id)
     {
+
         $list = Lists::where('id', $id)->firstOrFail();
 
         // Cek apakah ada input yang dikirim
