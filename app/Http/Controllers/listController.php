@@ -65,7 +65,7 @@ return view('contents.lists')->with([
             ]);
         }
 
-            return redirect('/list');
+            return redirect('/list')->with(['success' => 'success created list']);
 
     }
 

@@ -24,7 +24,7 @@
                             <form action="/list/{{ $list->id }}" method="POST">
                                 @csrf
                                 @method('delete')
-                                <button type="submit" class="mx-2 p-0 bg-transparent border-0">
+                                <button type="submit" class="mx-2 p-0 bg-transparent border-0" onclick="confirmDelete(event)" >
                                     <i class="bi bi-trash2-fill text-dark fs-3"></i>
                                 </button>
                             </form>
@@ -135,5 +135,26 @@
         @endforelse
     </div>
 </div>
+<script>
 
+    function confirmDelete(event) {
+        event.preventDefault(); // Mencegah submit langsung
+
+        Swal.fire({
+            title: "Apakah kamu yakin?",
+            text: "Data yang dihapus tidak bisa dikembalikan!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Ya, hapus!",
+            cancelButtonText: "Batal"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                event.target.closest("form").submit(); // Submit form kalau dikonfirmasi
+            }
+        });
+    }
+
+</script>
 @endsection

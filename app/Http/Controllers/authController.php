@@ -32,7 +32,7 @@ public function registerPage(){
     if(Auth::attempt(['username' => $request->username, 'password' => $request->password])){
         return redirect('/list');
     }else{
-        return redirect('/loginpage')->with(['header'=>'login','gagallogin','login yang anda lakukan tidak valid']);
+        return redirect('/loginpage')->with(['header'=>'login','gagallogin','login yang anda lakukan tidak valid','success' => 'berhasil login ']);
     }
 }
 
@@ -65,7 +65,7 @@ public function register(Request $request){
     if(Auth::attempt(['username' => $request->username, 'password' => $request->password])){
         return redirect('/list');
     }else{
-        return redirect('/registerpage')->with(['header'=>'register','gagalRegister','register yang anda lakukan tidak valid']);
+        return redirect('/registerpage')->with(['header'=>'register','gagalRegister','register yang anda lakukan tidak valid','success' => 'berhasil registrasi']);
     }
 }
 

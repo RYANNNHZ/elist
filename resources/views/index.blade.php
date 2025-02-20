@@ -210,6 +210,14 @@
         </div>
     </div>
 
+    @if (session('success'))
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            pemberitahuanSuccess({!! json_encode(session('success')) !!});
+        });
+    </script>
+@endif
+
 
     <script src="{{ url('js/popper.min.js') }}"></script>
     <script src="{{ url('js/bootstrap.js') }}"></script>
@@ -230,5 +238,17 @@
 
 
     </script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+
+function pemberitahuanSuccess(message) {
+        Swal.fire({
+            title: 'Hello!',
+            text: message,
+            icon: 'success',
+            confirmButtonText: 'OK'
+        });
+    }
+</script>
 </body>
 </html>
