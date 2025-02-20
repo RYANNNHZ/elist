@@ -14,13 +14,14 @@ return new class extends Migration
         Schema::create('lists', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('user_id')
-            ->constrained('users')
-            ->onDelete('cascade')
-            ->onUpdate('cascade');
+                ->constrained('users')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
             $table->string('title');
+            $table->timestamp('expired')->nullable(); // Fix di sini
             $table->text('description')->nullable();
-            $table->enum('status',['pending','in_progress','completed']);
-            $table->timestamps();
+            $table->enum('status', ['pending', 'in_progress', 'completed']);
+            $table->timestamps(); // Ini untuk created_at & updated_at
         });
     }
 

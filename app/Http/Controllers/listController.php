@@ -1,10 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\lists;
 use App\Models\tag;
+use App\Models\lists;
+use App\Models\ListTag;
 use Laravel\Prompts\error;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 class listController extends Controller
 {
@@ -39,11 +41,21 @@ class listController extends Controller
             'title.max' => 'title max 35 character',
         ]);
 
-        lists::create([
+        $list = lists::create([
             'title' => $request->title,
             'description' => $request->description,
-            'user_id' => Auth::user()->id
+            'user_id' => Auth::user()->id,
+            'expired' => $request->expired
         ]);
+
+
+        if($request->tag){
+            ListTag::create([
+                'user_id' => Auth::user()->id,
+                'tag_id' => $request->tag,
+                'list_id' => $list->id
+            ]);
+        }
 
             return redirect('/list');
 
@@ -83,6 +95,9 @@ class listController extends Controller
         if ($request->has('description')) {
             $data['description'] = $request->description;
         }
+        if ($request->has('expired')) {
+            $data['expired'] = $request->expired;
+        }
 
         // Kalau ada data yang diupdate, baru jalanin update()
         if (!empty($data)) {
@@ -103,4 +118,60 @@ class listController extends Controller
 
         return redirect('/list');
     }
+
+
+    public function searching(Request $request){
+        $listsName = $request->lists;
+
+        // Ambil hanya data lists milik user yang sedang login
+        $lists = Lists::where('user_id', Auth::id())
+                      ->where('title', 'like', "%$listsName%")
+                      ->get();
+
+        return view('contents.search')->with([
+            'header' => 'lists',
+            'lists' => $lists
+        ]);
+    }
+
+
+    public function ondeadline(Request $request){
+        $lists = Lists::where('user_id', Auth::id())
+            ->whereNotNull('expired')
+            ->where('expired', '<', now()->toDateTimeString()) // Pastikan format cocok
+            ->get(); // Eksekusi query
+
+        return view('contents.ondeadline')->with([
+            'header' => 'lists',
+            'lists' => $lists
+        ]);
+    }
+
+
+    public function ontime(Request $request){
+        $lists = Lists::where('user_id', Auth::id())
+            ->whereNotNull('expired')
+            ->whereNotNull('expired')
+            ->whereDate('expired', now()->toDateString())  // Ambil yang masih on-time
+            ->get();
+
+        return view('contents.ontime')->with([
+            'header' => 'lists',
+            'lists' => $lists
+        ]);
+    }
+    public function onedaybefore(Request $request){
+        $lists = Lists::where('user_id', Auth::id())
+            ->whereNotNull('expired')
+            ->whereDate('expired', now()->addDay()->toDateString())  // Ambil yang deadline besok
+            ->get();
+
+        return view('contents.onedaybefore')->with([
+            'header' => 'lists',
+            'lists' => $lists
+        ]);
+    }
+
+
+
 }

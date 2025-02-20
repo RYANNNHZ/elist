@@ -69,6 +69,32 @@ public function register(Request $request){
     }
 }
 
+
+public function profile() {
+    $user = Auth::user();
+
+    // Ambil data list berdasarkan user
+    $totalLists = $user->lists()->count();
+    $expiredLists = $user->lists()->whereNotNull('expired')->where('expired', '<', now())->count();
+    $onTimeLists = $user->lists()
+    ->whereNotNull('expired')
+    ->whereDate('expired', now()->toDateString()) // Pastikan hanya tanggal yang sama
+    ->count();
+
+    $onDayBefore = $user->lists()->whereNotNull('expired')->whereDate('expired', now()->addDay()->toDateString())->count();
+
+    return view('contents.profile')->with([
+        'header' => 'profile',
+        'totalLists' => $totalLists,
+        'expiredLists' => $expiredLists,
+        'onTimeLists' => $onTimeLists,
+        'onDayBefore' => $onDayBefore
+    ]);
+}
+
+
+
+
 public function logout(){
     Auth::logout();
     return redirect('/');

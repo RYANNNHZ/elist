@@ -45,9 +45,18 @@
                 ++++++++++++++++++++
             </div>
 
-            @forelse ($tags as $tag)
-            <div class="list-group list-group-flush">
-                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/list"><b>{{ $tag->name }}</b></a>
+            @forelse (Auth::user()->tags as $tag)
+            <div class="list-group list-group-flush d-flex">
+                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/tag/{{$tag->id}}"><b>{{ $tag->name }}</b></a>
+
+                <form action="/tag/{{ $tag->id }}" method="POST" >
+                    @csrf
+                    @method('delete')
+                    <button type="submit" class="btn btn-danger mx-2">
+                       delete tag
+                    </button>
+                </form>
+                <a class="btn btn-warning w-50" href="/tag/{{$tag->id}}/edit" > edit </a>
             </div>
             @empty
                 <small>there is no tag</small>
@@ -60,7 +69,7 @@
             <div id="wpAddTag" class="list-group list-group-flush ">
                 <form action="/tag" method="POST" >
                     @csrf
-                    <input type="text" name="tag" class="form-control" >
+                    <input type="text" name="name" class="form-control" >
                     <input type="hidden" name="user_id" value="{{ Auth::user()->id }}" >
                     <button type="submit" class="btn btn-warning" >add tag</button>
                 </form>
@@ -74,6 +83,23 @@
                     <button class="btn btn-primary" id="sidebarToggle">
                         <i class="bi bi-command"></i>
                     </button>
+
+
+                    <div class="col-md-5 my-auto ms-3">
+                        <form role="search" method="POST" action="/search">
+                            @method('post')
+                            @csrf
+                            <div class="input-group">
+                                <input type="search" name="lists" placeholder="Search your product" class="form-control" />
+                                <button class="btn bg-white" type="submit">
+                                    <i class="bi bi-search"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+
+
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
@@ -86,7 +112,7 @@
                             @endif
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="bi bi-person-circle"></i>
+                                    <img class="card-img-top" src="https://avatar.iran.liara.run/username?username={{ Auth::user()->username }}" alt="Title" style="width:2em" />
                                 </a>
                                 <h4>{{ Auth::user()->username }}</h4>
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
@@ -109,6 +135,11 @@
                     {{ $message }}
                   </div>
             @enderror
+                @error('name')
+                <div class="alert alert-danger my-3" role="alert">
+                    {{ $message }}
+                  </div>
+            @enderror
 
                 @yield('content')
             </div>
@@ -126,10 +157,19 @@
                     <form method="POST" action="/list" enctype="multipart/form-data">
                         @csrf
                         <div class="mb-3">
-                            <input type="text" id="title" class="fs-4 form-control border-0 shadow-none" placeholder="Title..." name="title">
+                            <input type="text" id="title" class="fs-4 form-control border-0 shadow-none" required="tolong isikan" placeholder="Title..." name="title">
                         </div>
                         <div class="mb-3">
                             <input type="text" id="description" class="form-control border-0 shadow-none"  name="description" placeholder="Description...">
+                        </div>
+                        <div class="mb-3">
+                            <input type="date" id="description" class="form-control border-0 shadow-none"  name="expired" placeholder="" >
+                        </div>
+                        <div class="mb-3">
+                            <div id="wpEditTag" onclick="openEditTag()" class="mb-3">
+                                <label for="" class="form-label" onclick="openEditTag()" >tag</label>
+                            </div>
+
                         </div>
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-primary">Save</button>
@@ -140,12 +180,36 @@
         </div>
     </div>
 
+
     <script src="{{ url('js/popper.min.js') }}"></script>
     <script src="{{ url('js/bootstrap.js') }}"></script>
     <script>
         document.getElementById("sidebarToggle").addEventListener("click", function() {
             document.getElementById("wrapper").classList.toggle("toggled");
         });
+
+        let wpedittag = document.getElementById('wpEditTag');
+
+        function closeEditTag(){
+    wpedittag.innerHTML = `
+        <label for="" class="form-label" onclick="openEditTag()">tag</label>
+    `;
+}
+
+
+
+        function openEditTag(){
+    wpedittag.innerHTML = `
+        <label for="" class="form-label" onclick="closeEditTag()">tag</label>
+        <select class="form-select form-select-lg" name="tag">
+            @foreach (Auth::user()->tags as $tag)
+            <option value="{{$tag->id}}">{{$tag->name}}</option>
+            @endforeach
+        </select>
+    `;
+}
+
+
 
     </script>
 </body>

@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\lists;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class ListTag extends Model
 {
@@ -20,7 +21,7 @@ class ListTag extends Model
 
     public function list(): BelongsTo
     {
-        return $this->belongsTo(Lists::class);
+        return $this->belongsTo(lists::class);
     }
 
     public function tag(): BelongsTo

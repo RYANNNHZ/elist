@@ -65,13 +65,29 @@ class taskController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $task = task::where('id', $id)->firstOrFail();
-        $task->update([
-           'task' => $request->task
-        ]);
+        $task = Task::where('id', $id)->firstOrFail();
+        $data = [];
+
+        if ($request->has('task')) {
+            $data['task'] = $request->task;
+        }
+
+        if ($request->has('is_done')) {
+            if ($request->is_done == 'done') {
+                $data['is_done'] = 'not_done'; // FIXED
+            } else if ($request->is_done == 'not_done') {
+                $data['is_done'] = 'done';
+            }
+        }
+
+        // Kalau ada data yang diupdate, baru jalanin update()
+        if (!empty($data)) {
+            $task->update($data);
+        }
 
         return redirect()->back();
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -84,5 +100,8 @@ public function destroy(string $id)
 
     return redirect()->back();
 }
+
+
+
 
 }
