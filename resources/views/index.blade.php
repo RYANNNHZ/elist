@@ -213,10 +213,16 @@
     @if (session('success'))
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            pemberitahuanSuccess({!! json_encode(session('success')) !!});
+            Swal.fire({
+                title: 'Success!',
+                text: {!! json_encode(session('success')) !!},
+                icon: 'success',
+                confirmButtonText: 'OK'
+            });
         });
     </script>
 @endif
+
 
 
     <script src="{{ url('js/popper.min.js') }}"></script>
@@ -241,14 +247,7 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
 
-function pemberitahuanSuccess(message) {
-        Swal.fire({
-            title: 'Hello!',
-            text: message,
-            icon: 'success',
-            confirmButtonText: 'OK'
-        });
-    }
+
 </script>
 </body>
 </html>
