@@ -5,17 +5,18 @@ namespace App\Models;
 use App\Models\tag;
 use App\Models\task;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-
 class Lists extends Model
 {
-    use HasFactory, HasUuids;
+    use SoftDeletes, HasFactory, HasUuids;
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
+    protected $dates = ['deleted_at'];
 
     public function user(): BelongsTo
     {

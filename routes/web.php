@@ -37,4 +37,9 @@ Route::get('/profile',[AuthController::class,'profile'])->middleware('isLogin');
 Route::get('/ondeadline',[listController::class,'ondeadline'])->middleware('isLogin');
 Route::get('/ontime',[listController::class,'ontime'])->middleware('isLogin');
 Route::get('/onedaybefore',[listController::class,'onedaybefore'])->middleware('isLogin');
-
+Route::get('/trash', [listController::class, 'trash'])->middleware('isLogin');
+Route::get('/restore/{id}', [listController::class, 'restore'])->middleware('isLogin');
+Route::get('/delete-permanent/{id}', [ListController::class, 'forceDelete'])->middleware('isLogin');
+Route::get('/restore-all', [ListController::class, 'restoreAll'])->middleware('isLogin');
+Route::get('/delete-all-permanent', [ListController::class, 'forceDeleteAll'])->middleware('isLogin');
+Route::get('/list/{id}/toggle-pin', [ListController::class, 'togglePin'])->name('list.togglePin');

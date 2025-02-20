@@ -75,6 +75,10 @@
                 </form>
             </div>
 
+            <div>
+                <a href="/trash">trash</a>
+            </div>
+
 
         </div>
         <div id="page-content-wrapper">

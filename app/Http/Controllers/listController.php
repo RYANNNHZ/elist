@@ -15,9 +15,17 @@ class listController extends Controller
      */
     public function index()
     {
-        $lists = Auth::user()->lists;
-        $tags = Auth::user()->tags;
-        return view('contents.lists')->with(['header' => 'lists','lists' => $lists,'tags' => $tags]);
+        $pinnedLists = Auth::user()->lists()->where('pin', 'pinned')->get();
+$notPinnedLists = Auth::user()->lists()->where('pin', 'not_pinned')->get();
+$tags = Auth::user()->tags;
+
+return view('contents.lists')->with([
+    'header' => 'lists',
+    "pinnedLists" => $pinnedLists,
+    "notPinnedLists" => $notPinnedLists,
+    'tags' => $tags
+]);
+
     }
 
     /**
@@ -172,6 +180,80 @@ class listController extends Controller
         ]);
     }
 
+
+    public function trash()
+    {
+        $lists = Auth::user()->lists()->onlyTrashed()->paginate(10);
+
+        return view('contents.trash')->with([
+            'header' => 'lists',
+            'lists' => $lists
+        ]);
+    }
+
+    public function restore($id)
+    {
+        $list = Auth::user()->lists()->onlyTrashed()->where('id', $id)->firstOrFail();
+
+        $list->restore();
+
+        return redirect('/trash')->with('status', 'Task berhasil direstore');
+    }
+
+
+    public function forceDelete($id)
+{
+    $list = Auth::user()->lists()->onlyTrashed()->where('id', $id)->firstOrFail();
+
+    $list->forceDelete(); // Hapus permanen dari database
+
+    return redirect('/trash')->with('status', 'Task berhasil dihapus permanen');
+}
+
+
+
+public function restoreAll()
+{
+    $lists = Auth::user()->lists()->onlyTrashed()->get();
+
+    if ($lists->isEmpty()) {
+        return redirect('/trash')->with('status', 'Tidak ada data untuk dikembalikan.');
+    }
+
+    foreach ($lists as $list) {
+        $list->restore();
+    }
+
+    return redirect('/trash')->with('status', 'Semua task berhasil dikembalikan.');
+}
+
+public function forceDeleteAll()
+{
+    $lists = Auth::user()->lists()->onlyTrashed()->get();
+
+    if ($lists->isEmpty()) {
+        return redirect('/trash')->with('status', 'Tidak ada data untuk dihapus permanen.');
+    }
+
+    foreach ($lists as $list) {
+        $list->forceDelete();
+    }
+
+    return redirect('/trash')->with('status', 'Semua task berhasil dihapus permanen.');
+}
+
+
+
+public function togglePin($id)
+{
+    $list = lists::where('id', $id)->firstOrFail();
+
+    // Toggle status pin
+    $list->pin = $list->pin === 'pinned' ? 'not_pinned' : 'pinned';
+    $list->save();
+
+    return redirect()->back()->with('success', 'List updated successfully!');
+}
 
 
 }
